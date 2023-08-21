@@ -1,0 +1,352 @@
+#Import libraries
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.metrics import classification_report, confusion_matrix
+import seaborn as sns
+
+pd.get_option("display.max_columns")
+
+pd.set_option("display.max_columns", None)
+
+#Import csv data file
+med_readmis = 'C:/Users/grace/OneDrive/Desktop/D207/medical_data_D207.csv'
+
+#Assign csv file to pandas data frame
+med_df = pd.read_csv(med_readmis)
+
+#View general structure of the data
+print(med_df.shape)
+print(list(med_df.columns))
+med_df.head()
+
+#Create a list of all irrelevant variables to be dropped from the data frame intitially
+irrelevant_vars = ['CaseOrder', 'Customer_id', 'Interaction', 'UID', 'City', 'State', 'County', 'Zip', 'Lat', 'Lng', 'TimeZone', 'Job', 'Hyperlipidemia', 'BackPain', 'Allergic_rhinitis', 'Reflux_esophagitis', 'Services', 'TotalCharge', 'Additional_charges', 'Item1', 'Item2', 'Item3', 'Item4', 'Item5', 'Item6', 'Item7', 'Item8']
+
+#Drop irrelevant columns previously listed from the data frame
+med_df=med_df.drop(irrelevant_vars, axis=1)
+
+#Confirm new general structure of the data is correct
+print(med_df.shape)
+print(list(med_df.columns))
+med_df.head()
+
+#Basic summary statistics of numeric variables
+med_df.describe()
+
+#Basic summary statistics of categorical variables
+med_df['Area'].value_counts()
+
+med_df['Overweight'].value_counts()
+
+med_df['Anxiety'].value_counts()
+
+med_df['Marital'].value_counts()
+
+med_df['Gender'].value_counts()
+
+med_df['Soft_drink'].value_counts()
+
+med_df['Initial_admin'].value_counts()
+
+med_df['HighBlood'].value_counts()
+
+med_df['Stroke'].value_counts()
+
+med_df['Complication_risk'].value_counts()
+
+med_df['Arthritis'].value_counts()
+
+med_df['Diabetes'].value_counts()
+
+med_df['Asthma'].value_counts()
+
+#Grouping numerical data by the target variable and displaying the mean for each numeric predictor variable according to response
+med_df.groupby('ReAdmis').mean()
+
+#Histogram univariate visualizations to explore distributions of categorical variables
+plt.hist(x="Area", data=med_df)
+plt.show()
+
+plt.hist(x="Overweight", data=med_df)
+plt.show()
+
+plt.hist(x="Anxiety", data=med_df)
+plt.show()
+
+plt.hist(x="Marital", data=med_df)
+plt.show()
+
+plt.hist(x="Gender", data=med_df)
+plt.show()
+
+plt.hist(x="Soft_drink", data=med_df)
+plt.show()
+
+plt.hist(x="Initial_admin", data=med_df)
+plt.show()
+
+plt.hist(x="HighBlood", data=med_df)
+plt.show()
+
+plt.hist(x="Stroke", data=med_df)
+plt.show()
+
+plt.hist(x="Complication_risk", data=med_df)
+plt.show()
+
+plt.hist(x="Arthritis", data=med_df)
+plt.show()
+
+plt.hist(x="Diabetes", data=med_df)
+plt.show()
+
+plt.hist(x="Asthma", data=med_df)
+plt.show()
+
+#Histogram univariate visualizations to explore distributions of numeric variables
+plt.hist(x="Population", data=med_df, bins=8)
+plt.show()
+
+plt.hist(x="Children", data=med_df, bins=8)
+plt.show()
+
+plt.hist(x="Age", data=med_df, bins=8)
+plt.show()
+
+plt.hist(x="Income", data=med_df, bins=12)
+plt.show()
+
+plt.hist(x="VitD_levels", data=med_df)
+plt.show()
+
+plt.hist(x="Doc_visits", data=med_df, bins=7)
+plt.show()
+
+plt.hist(x="Full_meals_eaten", data=med_df, bins=6)
+plt.show()
+
+plt.hist(x="vitD_supp", data=med_df, bins=10)
+plt.show()
+
+plt.hist(x="Initial_days", data=med_df, bins=9)
+plt.show()
+
+#Frequency Bar chart bivariate visualizations for each categorical predictor variable paired with the target variable
+pd.crosstab(med_df.Area,med_df.ReAdmis).plot(kind='bar')
+plt.title('Readmission Frequency by Area Type')
+plt.ylabel('Frequency of ReAdmission')
+plt.show()
+
+pd.crosstab(med_df.Marital,med_df.ReAdmis).plot(kind='bar')
+plt.title('Readmission Frequency by Marital Status')
+plt.ylabel('Frequency of ReAdmission')
+plt.show()
+
+pd.crosstab(med_df.Gender,med_df.ReAdmis).plot(kind='bar')
+plt.title('Readmission Frequency by Gender')
+plt.ylabel('Frequency of ReAdmission')
+plt.show()
+
+pd.crosstab(med_df.Soft_drink,med_df.ReAdmis).plot(kind='bar')
+plt.title('Readmission Frequency for Patients that have a Soft Drink')
+plt.ylabel('Frequency of ReAdmission')
+plt.show()
+
+pd.crosstab(med_df.Initial_admin,med_df.ReAdmis).plot(kind='bar')
+plt.title('Readmission Frequency by Initial Admission Category')
+plt.ylabel('Frequency of ReAdmission')
+plt.show()
+
+pd.crosstab(med_df.HighBlood,med_df.ReAdmis).plot(kind='bar')
+plt.title('Readmission Frequency for Patients with High Blood Pressure')
+plt.ylabel('Frequency of ReAdmission')
+plt.show()
+
+pd.crosstab(med_df.Stroke,med_df.ReAdmis).plot(kind='bar')
+plt.title('Readmission Frequency for Patients with History of Stroke')
+plt.ylabel('Frequency of ReAdmission')
+plt.show()
+
+pd.crosstab(med_df.Complication_risk,med_df.ReAdmis).plot(kind='bar')
+plt.title('Readmission Frequency by Complication Risk')
+plt.ylabel('Frequency of ReAdmission')
+plt.show()
+
+pd.crosstab(med_df.Overweight,med_df.ReAdmis).plot(kind='bar')
+plt.title('Readmission Frequency for Overweight Patients')
+plt.ylabel('Frequency of ReAdmission')
+plt.show()
+
+pd.crosstab(med_df.Arthritis,med_df.ReAdmis).plot(kind='bar')
+plt.title('Readmission Frequency for Patients with Arthritis')
+plt.ylabel('Frequency of ReAdmission')
+plt.show()
+
+pd.crosstab(med_df.Diabetes,med_df.ReAdmis).plot(kind='bar')
+plt.title('Readmission Frequency for Patients with Diabetes')
+plt.ylabel('Frequency of ReAdmission')
+plt.show()
+
+pd.crosstab(med_df.Anxiety,med_df.ReAdmis).plot(kind='bar')
+plt.title('Readmission Frequency for Patients with Anxiety')
+plt.ylabel('Frequency of ReAdmission')
+plt.show()
+
+pd.crosstab(med_df.Asthma,med_df.ReAdmis).plot(kind='bar')
+plt.title('Readmission Frequency for Patients with Asthma')
+plt.ylabel('Frequency of ReAdmission')
+plt.show()
+
+#Boxplot bivariate visualizations for each numeric predictor variable paired with the target variable
+sns.boxplot(x="Population", y="ReAdmis", data=med_df, showmeans=True)
+plt.show()
+
+sns.boxplot(x="Children", y="ReAdmis", data=med_df, showmeans=True)
+plt.show()
+
+sns.boxplot(x="Age", y="ReAdmis", data=med_df, showmeans=True)
+plt.show()
+
+sns.boxplot(x="Income", y="ReAdmis", data=med_df, showmeans=True)
+plt.show()
+
+sns.boxplot(x="VitD_levels", y="ReAdmis", data=med_df, showmeans=True)
+plt.show()
+
+sns.boxplot(x="Doc_visits", y="ReAdmis", data=med_df, showmeans=True)
+plt.show()
+
+sns.boxplot(x="Full_meals_eaten", y="ReAdmis", data=med_df, showmeans=True)
+plt.show()
+
+sns.boxplot(x="Initial_days", y="ReAdmis", data=med_df, showmeans=True)
+plt.show()
+
+sns.boxplot(x='vitD_supp', y='ReAdmis', data=med_df, showmeans=True)
+plt.show()
+
+#Encode categorical variables to prep data for regression analysis
+med_df=pd.get_dummies(med_df,prefix=['Area'],columns=['Area'],drop_first=True)
+med_df=pd.get_dummies(med_df,prefix=['ReAdmis'],columns=['ReAdmis'],drop_first=True)
+med_df=pd.get_dummies(med_df,prefix=['Overweight'],columns=['Overweight'],drop_first=True)
+med_df=pd.get_dummies(med_df,prefix=['Anxiety'],columns=['Anxiety'],drop_first=True)
+med_df=pd.get_dummies(med_df,prefix=['Marital'],columns=['Marital'],drop_first=True)
+med_df=pd.get_dummies(med_df,prefix=['Gender'],columns=['Gender'],drop_first=True)
+med_df=pd.get_dummies(med_df,prefix=['Soft_drink'],columns=['Soft_drink'],drop_first=True)
+med_df=pd.get_dummies(med_df,prefix=['Initial_admin'],columns=['Initial_admin'],drop_first=True)
+med_df=pd.get_dummies(med_df,prefix=['HighBlood'],columns=['HighBlood'],drop_first=True)
+med_df=pd.get_dummies(med_df,prefix=['Stroke'],columns=['Stroke'],drop_first=True)
+med_df=pd.get_dummies(med_df,prefix=['Complication_risk'],columns=['Complication_risk'],drop_first=True)
+med_df=pd.get_dummies(med_df,prefix=['Arthritis'],columns=['Arthritis'],drop_first=True)
+med_df=pd.get_dummies(med_df,prefix=['Diabetes'],columns=['Diabetes'],drop_first=True)
+med_df=pd.get_dummies(med_df,prefix=['Asthma'],columns=['Asthma'],drop_first=True)
+
+#Confirm new general structure of the data is correct
+print(med_df.shape)
+print(list(med_df.columns))
+med_df.head()
+
+#Split the data frame into sub-sets for X and y
+X=med_df[['Population', 'Children', 'Age', 'Income', 'VitD_levels', 'Doc_visits', 'Full_meals_eaten', 'vitD_supp', 'Initial_days', 'Area_Suburban', 'Area_Urban', 'Overweight_Yes', 'Anxiety_Yes', 'Marital_Married', 'Marital_Never Married', 'Marital_Separated', 'Marital_Widowed', 'Gender_Male', 'Gender_Nonbinary', 'Soft_drink_Yes', 'Initial_admin_Emergency Admission', 'Initial_admin_Observation Admission', 'HighBlood_Yes', 'Stroke_Yes', 'Complication_risk_Low', 'Complication_risk_Medium', 'Arthritis_Yes', 'Diabetes_Yes', 'Asthma_Yes']]
+y=med_df[['ReAdmis_Yes']]
+y=y.values.ravel()
+print(X.shape)
+print(y.shape)
+
+#Split the data into train and test sub-sets with a test size of 30%
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
+
+from sklearn.preprocessing import StandardScaler
+
+scaler = StandardScaler()
+
+X_train_std = scaler.fit_transform(X_train)
+
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+
+lr = LogisticRegression()
+lr.fit(X_train_std, y_train)
+
+X_test_std = scaler.transform(X_test)
+
+y_pred = lr.predict(X_test_std)
+print(accuracy_score(y_test, y_pred))
+
+print(dict(zip(X.columns, abs(lr.coef_[0]))))
+
+print(lr.intercept_)
+
+import statsmodels.api as sm
+lr_initial = sm.Logit(y_train, X_train).fit()
+print(lr_initial.summary())
+
+#Implementation of recursive feature elimination procedure to reduce number of features in the model
+from sklearn.feature_selection import RFE
+rfe = RFE(estimator=LogisticRegression(), n_features_to_select=7, verbose=1)
+rfe.fit(X_train_std, y_train)
+
+X.columns[rfe.support_]
+
+print(dict(zip(X.columns, rfe.ranking_)))
+
+print(accuracy_score(y_test, rfe.predict(X_test_std)))
+
+#Splitting data into sub-sets for X and y for the reduced model
+X_red=med_df[['Initial_days', 'Initial_admin_Emergency Admission', 'HighBlood_Yes', 'Stroke_Yes', 'Complication_risk_Low', 'Arthritis_Yes', 'Asthma_Yes']]
+y_red=med_df[['ReAdmis_Yes']]
+y_red=y_red.values.ravel()
+print(X_red.shape)
+print(y_red.shape)
+
+X_red_train, X_red_test, y_red_train, y_red_test = train_test_split(X_red, y_red, test_size=0.3)
+
+scaler_red = StandardScaler()
+
+X_red_train_std = scaler_red.fit_transform(X_red_train)
+
+lr_red = LogisticRegression()
+lr_red.fit(X_red_train_std, y_red_train)
+
+X_red_test_std = scaler_red.transform(X_red_test)
+
+y_red_pred = lr_red.predict(X_red_test_std)
+print(accuracy_score(y_red_test, y_red_pred))
+
+print(dict(zip(X_red.columns, abs(lr_red.coef_[0]))))
+
+print(lr_red.intercept_)
+
+lr_reduced = sm.Logit(y_red_train, X_red_train).fit()
+print(lr_reduced.summary())
+
+#Confusion matrix calculation for the reduced model's predicted and true target values
+conf_matrix = confusion_matrix(y_red_test, y_red_pred)
+print(conf_matrix)
+
+#Extract true negatives, true positives, false negatives, and false positives from the confusion matrix
+TN = conf_matrix[0,0]
+TP = conf_matrix[1,1]
+FN = conf_matrix[1,0]
+FP = conf_matrix[0,1]
+
+#Calculate and print the accuracy, sensitivity, and specificity of the model
+accuracy = (TN + TP) / (TN + FN + FP + TP)
+print("accuracy: ", accuracy)
+sensitivity = TP / (TP + FN)
+print("sensitivity: ", sensitivity)
+specificity = TN / (TN + FP)
+print("specificity: ", specificity)
+
+odds = np.exp(lr_red.coef_[0])
+
+pd.DataFrame(X_red.columns, odds.round(3), columns=['coef'])
+
+intercept_odds = np.exp(lr_red.intercept_[0])
+
+print(intercept_odds)
+
+med_df.to_csv (r'C:\Users\grace\OneDrive\Desktop\D208_PA002_Cleaned_Data_Set.csv', index = False, header=True)
